@@ -1,0 +1,119 @@
+plugins {
+    id 'com.android.application'
+}
+//自定义插件，groovy java也能做自定义插件，一般做插件用groovy
+// 1. 脚本插件，（引入的gradle文件）
+apply from: 'config.gradle'
+apply from :'../config.gradle'
+// 对象插件分3类
+// 2. 直接写在gradle的脚本文件中
+// 3. 半独立的插件，在buildSrc中，只能在本项目中，不能给其他项目使用
+// 4. 独立插件，在独立的项目中
+
+android {
+    namespace 'com.xiaomi.gradledemo'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.xiaomi.gradledemo"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+// app，模块下的build.gradle文件中定义的对象插件
+// 2. 对象插件， 直接写在gradle的脚本文件中，用的时候才会执行
+class  CustomGradlePlugin implements Plugin<Project>{
+    @Override
+    void apply(Project target) {
+        target.task("showCustomPlugin"){
+            doLast{
+                println "this is Custom Gradle Plugin..."
+            }
+        }
+    }
+}
+
+// groovy语法 java非常类似，java是严谨的语法，groovy是糖果语法
+// 1.字符串 2.list集合 map集合 方法 对象 闭包 任务 文件操作
+task stringTest {
+    String str1 = "addasda\n"
+    String str2 = "gggdasdas"
+    println str1 + str2
+}
+
+task list {
+    def list = [1, 2, 3, 4, 5]
+    println list[0]
+    //奇怪的方式1
+    for (int i in list) {
+        println list[i]
+    }
+    //奇怪的方式2
+    for (int i in 0..5) {
+        println list[i]
+    }
+    //奇怪的方式3,it表示this，这里是每一个元素
+    list.each {
+        println it
+    }
+}
+
+task map {
+    /**
+     * {key:'name' value:'andy'},
+     *
+     */
+    def map = ['name': 'andy', 'age': '18']
+    println map['name']
+    map.each {
+        println it
+        println it.key
+        println it.value
+        println it.getKey()
+        println it.getValue()
+    }
+}
+
+task method {
+    def a = methodA(3, 5)
+    println a
+}
+
+def methodA(int a, int b) {
+    //groovy 语法中默认将行数最后一行作为结果返回
+    a + b
+    // 1
+    //null
+    ;
+
+    println 2222
+}

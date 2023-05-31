@@ -1,0 +1,5 @@
+// ext 表示额外的属性声明
+ext {
+    server = "prd"
+    dataSource = "0"
+}

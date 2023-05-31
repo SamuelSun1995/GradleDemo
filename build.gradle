@@ -1,0 +1,28 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+plugins {
+    id 'com.android.application' version '8.0.1' apply false
+    id 'com.android.library' version '8.0.1' apply false
+}
+
+gradle.beforeProject { project ->
+    println "project--->beforeProject: $project.name"
+    //可以在生命周期里面触发我们自己写的插件
+}
+
+gradle.afterProject { project, projectState ->
+    println "project--->afterProject: $project.name"
+}
+
+this.project.subprojects { sub ->
+    sub.beforeEvaluate {
+        project
+        println "project--->#### Evaluate before of " + project.path
+
+    }
+
+    afterEvaluate {
+        println "project--->afterEvaluate start..."
+        //TODO something
+        println "project--->afterEvaluate end..."
+    }
+}

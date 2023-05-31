@@ -1,0 +1,5 @@
+project.task("scriptPlugin") {
+    doLast{
+        println "$project.name:this is a script plugin"
+    }
+}
